@@ -44,8 +44,8 @@ RXIEXT const char *RX_Init(int opts, RL_LIB *lib) {
 	RL = lib;
 	REBYTE ver[8];
 	RL_VERSION(ver);
-	debug_print("
-		RXinit easing-extension; Rebol v%i.%i.%i\n",
+	debug_print(
+		"RXinit easing-extension; Rebol v%i.%i.%i\n",
 		ver[1], ver[2], ver[3]);
 
 	if (MIN_REBOL_VERSION > VERSION(ver[1], ver[2], ver[3])) {
