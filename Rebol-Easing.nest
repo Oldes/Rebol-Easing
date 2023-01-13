@@ -18,6 +18,7 @@ flag:   shared
 ;- options common for all Rebol extensions ----------------------
 #if Windows? [
 	define: _CRT_SECURE_NO_WARNINGS
+	upx: on
 ]
 #if macOS?   [
 	define: TO_OSX
