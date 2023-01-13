@@ -1,0 +1,10 @@
+/*
+!/.gitignore
+!/.github
+!/.editorconfig
+!*.nest
+!/rebol
+!/src
+!/test
+!/README.md
+!/LICENSE
