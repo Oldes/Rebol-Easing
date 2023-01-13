@@ -25,7 +25,7 @@ jobs:
     - name: Prepare 32bit Rebol/Easing extension
       run:  |
         MD ./build/ 2> nul
-        MOVE ./msvc/Release-Win32/easing-linux-x64.dll ./build/easing-windows-x86.rebx
+        MOVE ./msvc/Release-Win32/easing-linux-x86.dll ./build/easing-windows-x86.rebx
 
     - name: Build 64bit Rebol/Easing extension
       run: ./siskin Rebol-Easing.nest --msvc easing-windows-x64
