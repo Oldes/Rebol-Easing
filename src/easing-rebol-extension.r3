@@ -1,9 +1,14 @@
 REBOL [
-	title: "Rebol/Easing module builder"
-	type:   module
+	title:  "Rebol/Easing module builder"
+	type:    module
+	date:    13-Jan-2023
+	home:    https://github.com/Oldes/Rebol-Easing
+	version: 1.0.0
+	author: @Oldes
 ]
 
 ;- all extension command specifications ----------------------------------------
+;; all commands expects input value in the range 0.0 - 1.0 (no validation!)
 commands: [
 	linear:         ["Modeled after the line     y = x"    x [decimal!]]
 	in-quad:        ["Modeled after the parabola y = x^^2" x [decimal!]]
@@ -104,7 +109,7 @@ typedef int (*MyCommandPointer)(RXIFRM *frm, void *ctx);
 
 #define EASING_EXT_INIT_CODE $init-code
 }
-;-------------------------------------------------------------------------------
+;;------------------------------------------------------------------------------
 ctable: {
 //
 // auto-generated file, do not modify!

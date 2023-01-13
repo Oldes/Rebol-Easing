@@ -3,14 +3,17 @@
 ;-  (/uOu\)  https://github.com/Siskin-framework/Builder/                       
 ;-===="="=======================================================================
 
-
 compiler: gcc
-version: 1.0.0
+version:  1.0.0
 optimize: 3
-;strip: on
+strip:    off
 
-define: USE_TRACES
+;define: USE_TRACES
 define: AH_EASING_USE_DBL_PRECIS
+define: ENDIAN_LITTLE
+
+cflag:  fpermissive
+flag:   shared
 
 ;- options common for all Rebol extensions ----------------------
 #if Windows? [
@@ -24,35 +27,27 @@ define: AH_EASING_USE_DBL_PRECIS
 	define: TO_LINUX
 ]
 
-define: ENDIAN_LITTLE
-
 target-x86: [
 	arch: x86
-	#if Windows? [ defines: [ TO_WIN32 _WIN32 ] ]
-	#if Linux?   [ defines: [ TO_LINUX_X86    ] ]
 ]
 target-x64: [
 	arch: x64
 	defines: [
 		_FILE_OFFSET_BITS=64
-		__LP64__ ; has long (integer) 64 bits
+		__LP64__       ; has long (integer) 64 bits
 	]
-	#if Windows? [ defines: [ TO_WIN32_X64 _WIN32 ] ]
-	#if Linux?   [ defines: [ TO_LINUX_X64        ] ]
-	#if macOS?   [ defines: [ TO_OSX_X64          ] flags: ["-arch x86_64"] ]
+	#if macOS?   [ flag: "-arch x86_64" ]
 ]
 target-arm64: [
 	arch: arm64
 	#if Linux? [
-		flags: ["-arch arm64"]
+		flag: "-arch arm64"
 	]
 	#if macOS? [
-		flags: "-target arm64-apple-darwin"
-		define: TO_OSX_ARM64
+		flag: "-target arm64-apple-darwin"
 	]
-	flags: ["-arch arm64"]
 	define: _FILE_OFFSET_BITS=64
-	define: __LP64__ ; has long (integer) 64 bits
+	define: __LP64__   ; has long (integer) 64 bits
 	define: __arm64__
 ]
 target-armv7: [
@@ -74,12 +69,8 @@ include: [
 	%rebol/src/include/
 ]
 
-cflag:   fpermissive
-flag:    shared
-
 #if Posix? [
-	cflags: [-fPIC -pthread ]
-	;libraries: [%pthread]
+	cflags: fPIC
 ]
 
 ;- generate main extension header --------------------------------
@@ -87,7 +78,33 @@ do %src/easing-rebol-extension.r3
 
 
 eggs: only [
+	#if Windows? [
+		"Rebol Easing extension: windows_x86" [
+			name: %easing-windows-x86
+			:target-x86
+		]
+		"Rebol Easing extension: windows_x64" [
+			name: %easing-windows-x64
+			:target-x64
+		]
+		"Rebol Easing extension: linux_armv7" [
+			name: %easing-linux-armv7
+			:target-armv7
+		]
+		"Rebol Easing extension: linux_arm64" [
+			name: %easing-linux-arm64
+			:target-arm64
+		]
+	]
 	#if Linux? [
+		"Rebol Easing extension: linux_x86" [
+			name: %easing-linux-x86
+			:target-x86
+		]
+		"Rebol Easing extension: linux_x64" [
+			name: %easing-linux-x64
+			:target-x64
+		]
 		"Rebol Easing extension: linux_armv7" [
 			name: %easing-linux-armv7
 			:target-armv7
