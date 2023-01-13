@@ -1,0 +1,40 @@
+name: 'Rebol-Easing CI'
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Siskin Builder
+      uses: oldes/install-siskin@v0.7.1
+    
+    - name: Build 64bit Rebol/Easing extension
+      run: ./siskin Rebol-Easing.nest --clean easing-linux-x64
+
+    - name: Prepare 64bit Rebol Easing extension
+      run:  mv ./build/easing-linux-x64.so ./build/easing-linux-x64.rebx
+
+    - name: Install Rebol for extension test
+      uses: oldes/install-rebol@v3.10.2
+
+    - name: Minimal Rebol/Easing extension test
+      run:  ./rebol3 ci-test.r3
+
+    - name: Compress 64bit Rebol/Easing extension
+      run:  gzip -9 ./build/easing-linux-x64.rebx
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Rebol-Easing-CI-${{github.run_id}}
+        path: ./build/*.gz
