@@ -20,16 +20,18 @@ jobs:
       uses: oldes/install-siskin@v0.7.1
 
     - name: Build 32bit Rebol/Easing extension
-      run: ./siskin Rebol-Easing.nest --clean easing-windows-x86
+      run: ./siskin Rebol-Easing.nest --msvc easing-windows-x86
 
     - name: Prepare 32bit Rebol/Easing extension
-      run:  MOVE ./build/easing-linux-x64.dll ./build/easing-windows-x86.rebx
+      run:  |
+        MD ./build/ 2> nul
+        MOVE ./msvc/Release-Win32/easing-linux-x64.dll ./build/easing-windows-x86.rebx
 
     - name: Build 64bit Rebol/Easing extension
-      run: ./siskin Rebol-Easing.nest --clean easing-windows-x64
+      run: ./siskin Rebol-Easing.nest --msvc easing-windows-x64
 
     - name: Prepare 64bit Rebol/Easing extension
-      run:  MOVE ./build/easing-linux-x64.dll ./build/easing-windows-x64.rebx
+      run:  MOVE ./msvc/Release-x64/easing-linux-x64.dll ./build/easing-windows-x64.rebx
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.10.2
