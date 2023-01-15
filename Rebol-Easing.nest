@@ -67,10 +67,6 @@ files: [
 	%easing-commands.c
 	%easing-commands-table.c
 ]
-include: [
-	%src/
-	%rebol/src/include/
-]
 
 #if Posix? [
 	cflags: fPIC

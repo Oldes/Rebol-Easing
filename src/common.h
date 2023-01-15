@@ -37,13 +37,7 @@
 #define API_EXPORT __attribute__((visibility("default")))
 #endif
 
-#include "reb-ext.h"		// includes also reb-c.h and reb-defs.h
-#include "reb-device.h"
-#include "reb-file.h"
-#include "reb-filereq.h"
-#include "reb-event.h"
-#include "reb-evtypes.h"
-#include "reb-lib.h"
+#include "rebol-extension.h"
 
 #ifdef  USE_TRACES
 #include <stdio.h>
