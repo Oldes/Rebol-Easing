@@ -1,11 +1,12 @@
 ////////////////////////////////////////////////////////////////////////
 // File: rebol-extension.h
 // Home: https://github.com/Oldes/Rebol3/
-// Date: 15-Jan-2023
+// Date: 16-Jan-2023/10:47:32
 // Note: This file is amalgamated from these sources:
 //
 //       reb-c.h
 //       reb-ext.h
+//       reb-args.h
 //       reb-device.h
 //       reb-file.h
 //       reb-filereq.h
@@ -278,12 +279,14 @@ typedef void(*CFUNC)(void *);
 #define CLR_FLAG(v,f)       ((v) &= ~(1<<(f)))
 #define CLR_FLAGS(v,f,g)    ((v) &= ~((1<<(f)) | (1<<(g))))
 
+#ifndef MIN
 #ifdef min
 #define MIN(a,b) min(a,b)
 #define MAX(a,b) max(a,b)
 #else
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
+#endif
 #endif
 
 // Memory related functions:
@@ -729,7 +732,7 @@ enum encoding_opts {
 **
 **  Title: Extension Types (Isolators)
 **  Build: 3.10.3
-**  Date:  12-Jan-2023
+**  Date:  16-Jan-2023
 **  File:  ext-types.h
 **
 **  AUTO-GENERATED FILE - Do not modify. (From: make-boot.reb)
@@ -2287,7 +2290,10 @@ typedef struct Reb_Handle_Spec {
 } REBHSP;
 
 typedef struct Reb_Handle_Context {
-	REBYTE *data;     // Pointer to raw data
+	union {
+		REBYTE *data; // Pointer to raw data
+		void *handle; // Unspecified pointer (external handle)
+	};
 	REBCNT  sym;      // Index of the word's symbol. Used as a handle's type!
 	REBFLG  flags:16; // Handle_Flags (HANDLE_CONTEXT_MARKED and HANDLE_CONTEXT_USED)
 	REBCNT  index:16; // Index into Reb_Handle_Spec value
@@ -2505,10 +2511,15 @@ typedef struct Reb_All {
 
 
 
-
-#ifndef REBARGS
-#define REBARGS void
+#ifndef API_EXPORT
+# define RL_API API_EXPORT
+# ifdef TO_WINDOWS
+#  define API_EXPORT __declspec(dllexport)
+# else
+#  define API_EXPORT __attribute__((visibility("default")))
+# endif
 #endif
+
 
 /* Prefix naming conventions:
 
@@ -2552,7 +2563,10 @@ typedef union rxi_arg_val {
 		int height:16;
 	};
 	struct {
-		void  *ptr;
+		union {
+			void  *ptr;
+			REBHOB *hob;    // Handle's context object
+		};
 		REBCNT type;      // Handle's name (symbol)
 		REBFLG flags:16;  // Handle_Flags
 		REBCNT index:16;  // Index into Reb_Handle_Spec value
@@ -2606,6 +2620,7 @@ typedef int (*RXICAL)(int cmd, RXIFRM *args, REBCEC *ctx);
 #define RXA_OBJECT(f,n)	(RXA_ARG(f,n).addr)
 #define RXA_MODULE(f,n)	(RXA_ARG(f,n).addr)
 #define RXA_HANDLE(f,n)	(RXA_ARG(f,n).handle.ptr)
+#define RXA_HANDLE_CONTEXT(f,n) (RXA_ARG(f,n).handle.hob)
 #define RXA_HANDLE_TYPE(f,n)  (RXA_ARG(f,n).handle.type)
 #define RXA_HANDLE_FLAGS(f,n)  (RXA_ARG(f,n).handle.flags)
 #define RXA_HANDLE_INDEX(f,n)  (RXA_ARG(f,n).handle.index)
@@ -2665,6 +2680,106 @@ enum {
 
 
 #define AS_WORD(w) RL_MAP_WORD(b_cast(w)) // may be used to awoid warning casting from char* to REBYTE*
+
+
+// File: reb-args.h
+/***********************************************************************
+**
+**  REBOL [R3] Language Interpreter and Run-time Environment
+**
+**  Copyright 2012 REBOL Technologies
+**  REBOL is a trademark of REBOL Technologies
+**
+**  Licensed under the Apache License, Version 2.0 (the "License");
+**  you may not use this file except in compliance with the License.
+**  You may obtain a copy of the License at
+**
+**  http://www.apache.org/licenses/LICENSE-2.0
+**
+**  Unless required by applicable law or agreed to in writing, software
+**  distributed under the License is distributed on an "AS IS" BASIS,
+**  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+**  See the License for the specific language governing permissions and
+**  limitations under the License.
+**
+************************************************************************
+**
+**  Summary: Program startup arguments
+**  Module:  reb-args.h
+**  Author:  Carl Sassenrath
+**  Notes:
+**     Arg struct is used by R3 lib, so must not be modified.
+**
+***********************************************************************/
+
+// REBOL startup option structure:
+typedef struct rebol_args {
+	REBCNT options;
+	REBCHR *script;
+	REBCHR *do_arg;
+	REBCHR *version;
+	REBCHR *debug;
+	REBCHR *import;
+	REBCHR *secure;
+	REBCHR *boot;
+	REBCHR *exe_path;
+	REBCHR *current_dir;
+	REBCHR *args;         // value for the --args option
+	REBCNT  argc;         // unprocessed argument count
+	REBCHR **argv;        // unprocessed arguments
+} REBARGS;
+
+// REBOL arg option flags:
+// Must stay matched to system/catalog/boot-flags.
+enum arg_opts {
+	ROF_EXT,
+
+	ROF_SCRIPT,
+	ROF_ARGS,
+	ROF_DO,
+	ROF_IMPORT,
+	ROF_VERSION,
+	ROF_DEBUG,
+	ROF_SECURE,
+
+	ROF_HELP,
+	ROF_VERS,
+	ROF_QUIET,
+	ROF_VERBOSE,
+	ROF_SECURE_MIN,
+	ROF_SECURE_MAX,
+	ROF_TRACE,
+	ROF_HALT,
+	ROF_CGI,
+	ROF_BOOT,
+	ROF_NO_WINDOW,
+
+	ROF_IGNORE, // not an option
+};
+
+#define RO_EXT         (1<<ROF_EXT)
+#define RO_HELP        (1<<ROF_HELP)
+#define RO_IMPORT      (1<<ROF_IMPORT)
+#define RO_CGI         (1<<ROF_CGI)
+#define RO_ARGS        (1<<ROF_ARGS)
+#define RO_DO          (1<<ROF_DO)
+#define RO_DEBUG       (1<<ROF_DEBUG)
+#define RO_SECURE_MIN  (1<<ROF_SECURE_MIN)
+#define RO_SECURE_MAX  (1<<ROF_SECURE_MAX)
+#define RO_QUIET       (1<<ROF_QUIET)
+#define RO_SCRIPT      (1<<ROF_SCRIPT)
+#define RO_SECURE      (1<<ROF_SECURE)
+#define RO_TRACE       (1<<ROF_TRACE)
+#define RO_VERSION     (1<<ROF_VERSION)
+#define RO_VERS        (1<<ROF_VERS)
+#define RO_VERBOSE     (1<<ROF_VERBOSE)
+#define RO_HALT        (1<<ROF_HALT)
+#define RO_BOOT        (1<<ROF_BOOT)
+#define RO_NO_WINDOW   (1<<ROF_NO_WINDOW)
+
+#define RO_IGNORE      (1<<ROF_IGNORE)
+
+void Parse_Args(int argc, REBCHR **argv, REBARGS *rargs);
 
 
 // File: reb-device.h
@@ -3008,7 +3123,7 @@ enum {
 **
 **  Title: Event Types
 **  Build: 3.10.3
-**  Date:  12-Jan-2023
+**  Date:  16-Jan-2023
 **  File:  reb-evtypes.h
 **
 **  AUTO-GENERATED FILE - Do not modify. (From: make-boot.reb)
@@ -3107,7 +3222,7 @@ enum event_keys {
 **
 **  Title: REBOL Host and Extension API
 **  Build: 3.10.3
-**  Date:  12-Jan-2023
+**  Date:  16-Jan-2023
 **  File:  reb-lib.reb
 **
 **  AUTO-GENERATED FILE - Do not modify. (From: make-reb-lib.reb)

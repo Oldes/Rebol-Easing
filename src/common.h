@@ -29,14 +29,6 @@
 // Common Rebol (3.10.03) extension includes/defines
 // =======================================================================
 
-#define REB_EXTENSION
-#define RL_API API_EXPORT
-#ifdef TO_WINDOWS
-#define API_EXPORT __declspec(dllexport)
-#else
-#define API_EXPORT __attribute__((visibility("default")))
-#endif
-
 #include "rebol-extension.h"
 
 #ifdef  USE_TRACES
