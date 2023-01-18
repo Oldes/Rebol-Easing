@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install Siskin Builder
       uses: oldes/install-siskin@v0.7.1
@@ -39,7 +39,7 @@ jobs:
     - name: Minimal Rebol/Easing extension test
       run:  ./rebol3 ci-test.r3
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: Rebol-Easing-CI-${{github.run_id}}
         path: ./build/*.rebx
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install Siskin Builder
       uses: oldes/install-siskin@v0.7.1
@@ -68,7 +68,7 @@ jobs:
     - name: Compress 64bit Rebol/Easing extension
       run:  gzip -9 ./build/easing-linux-x64.rebx
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: Rebol-Easing-CI-${{github.run_id}}
         path: ./build/*.gz
@@ -77,7 +77,7 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install Siskin Builder
       uses: oldes/install-siskin@v0.7.1
@@ -97,7 +97,7 @@ jobs:
     - name: Compress 64bit Rebol/Easing extension
       run:  gzip -9 ./build/easing-macos-x64.rebx
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: Rebol-Easing-CI-${{github.run_id}}
         path: ./build/*.gz
