@@ -79,7 +79,7 @@ foreach [name type] [
     file: as file! ajoin [n %_ease_ type %.png]
 
     print ajoin ["### Easing " name]
-    print ajoin ["![" name "](https://github.com/Oldes/Rebol-Easing/raw/master/.github/" file ")"]
+    print ajoin ["![" name "](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/" file ")"]
 
     save file img
 ]

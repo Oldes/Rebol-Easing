@@ -30,20 +30,20 @@ probe ease/in-out-quad 0.4
 Images generated using [gen-graphs.r3](https://github.com/Oldes/Rebol-Easing/blob/master/.github/gen-graphs.r3) script.
 
 ### Easing quadratic
-![quadratic](https://github.com/Oldes/Rebol-Easing/raw/master/.github/1_ease_quad.png)
+![quadratic](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/1_ease_quad.png)
 ### Easing cubic
-![cubic](https://github.com/Oldes/Rebol-Easing/raw/master/.github/2_ease_cubic.png)
+![cubic](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/2_ease_cubic.png)
 ### Easing quartic
-![quartic](https://github.com/Oldes/Rebol-Easing/raw/master/.github/3_ease_quart.png)
+![quartic](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/3_ease_quart.png)
 ### Easing sine
-![sine](https://github.com/Oldes/Rebol-Easing/raw/master/.github/4_ease_sine.png)
+![sine](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/4_ease_sine.png)
 ### Easing circular
-![circular](https://github.com/Oldes/Rebol-Easing/raw/master/.github/5_ease_circ.png)
+![circular](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/5_ease_circ.png)
 ### Easing exponential
-![exponential](https://github.com/Oldes/Rebol-Easing/raw/master/.github/6_ease_expo.png)
+![exponential](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/6_ease_expo.png)
 ### Easing elastic
-![elastic](https://github.com/Oldes/Rebol-Easing/raw/master/.github/7_ease_elastic.png)
+![elastic](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/7_ease_elastic.png)
 ### Easing back
-![back](https://github.com/Oldes/Rebol-Easing/raw/master/.github/8_ease_back.png)
+![back](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/8_ease_back.png)
 ### Easing bounce
-![bounce](https://github.com/Oldes/Rebol-Easing/raw/master/.github/9_ease_bounce.png)
+![bounce](https://raw.githubusercontent.com/Oldes/Rebol-Easing/main/.github/9_ease_bounce.png)
