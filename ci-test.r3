@@ -2,11 +2,11 @@ Rebol [
     title: "Rebol/Easing extension CI test"
 ]
 
-;; register build directory as a location with existing modules...
-supplement system/options/module-paths to-real-file %./build/
+;; make sure that we load a fresh extension
+try [system/modules/easing: none]
+ease: import 'easing
 
 ;; print content of the module...
-ease: import 'easing
 ? ease
 
 ;; try all available easing functions...

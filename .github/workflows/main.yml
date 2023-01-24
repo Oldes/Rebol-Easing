@@ -23,15 +23,13 @@ jobs:
       run: ./siskin Rebol-Easing.nest --msvc easing-windows-x86
 
     - name: Prepare 32bit Rebol/Easing extension
-      run:  |
-        MD ./build/ 2> nul
-        MOVE ./msvc/Release-Win32/easing-windows-x86.dll ./build/easing-windows-x86.rebx
+      run:  MOVE ./msvc/Release-Win32/easing-windows-x86.dll ./easing-windows-x86.rebx
 
     - name: Build 64bit Rebol/Easing extension
       run: ./siskin Rebol-Easing.nest --msvc easing-windows-x64
 
     - name: Prepare 64bit Rebol/Easing extension
-      run:  MOVE ./msvc/Release-x64/easing-windows-x64.dll ./build/easing-windows-x64.rebx
+      run:  MOVE ./msvc/Release-x64/easing-windows-x64.dll ./easing-windows-x64.rebx
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.10.2
@@ -42,7 +40,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: Rebol-Easing-CI-${{github.run_id}}
-        path: ./build/*.rebx
+        path: ./easing*.rebx
 
   linux:
     runs-on: ubuntu-latest
@@ -57,7 +55,7 @@ jobs:
       run: ./siskin Rebol-Easing.nest --clean easing-linux-x64
 
     - name: Prepare 64bit Rebol Easing extension
-      run:  mv ./build/easing-linux-x64.so ./build/easing-linux-x64.rebx
+      run:  mv ./build/easing-linux-x64.so ./easing-linux-x64.rebx
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.10.2
@@ -66,12 +64,12 @@ jobs:
       run:  ./rebol3 ci-test.r3
 
     - name: Compress 64bit Rebol/Easing extension
-      run:  gzip -9 ./build/easing-linux-x64.rebx
+      run:  gzip -9 ./easing-linux-x64.rebx
 
     - uses: actions/upload-artifact@v3
       with:
         name: Rebol-Easing-CI-${{github.run_id}}
-        path: ./build/*.gz
+        path: ./easing*.gz
 
   macos:
     runs-on: macos-latest
@@ -86,7 +84,7 @@ jobs:
       run: ./siskin Rebol-Easing.nest --clean easing-macos-x64
 
     - name: Prepare 64bit Rebol Easing extension
-      run:  mv ./build/easing-macos-x64.dylib ./build/easing-macos-x64.rebx
+      run:  mv ./build/easing-macos-x64.dylib ./easing-macos-x64.rebx
 
     - name: Install Rebol for extension test
       uses: oldes/install-rebol@v3.10.2
@@ -95,10 +93,10 @@ jobs:
       run:  ./rebol3 ci-test.r3
 
     - name: Compress 64bit Rebol/Easing extension
-      run:  gzip -9 ./build/easing-macos-x64.rebx
+      run:  gzip -9 ./easing-macos-x64.rebx
 
     - uses: actions/upload-artifact@v3
       with:
         name: Rebol-Easing-CI-${{github.run_id}}
-        path: ./build/*.gz
+        path: ./easing*.gz
 
