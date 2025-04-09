@@ -1,4 +1,8 @@
+[![rebol-easing](https://github.com/user-attachments/assets/f012f01b-7185-4431-a6f6-27127702f412)](https://github.com/Oldes/Rebol-Easing)
+
 [![Rebol-Easing CI](https://github.com/Oldes/Rebol-Easing/actions/workflows/main.yml/badge.svg)](https://github.com/Oldes/Rebol-Easing/actions/workflows/main.yml)
+[![Gitter](https://badges.gitter.im/rebol3/community.svg)](https://app.gitter.im/#/room/#Rebol3:gitter.im)
+[![Zulip](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://rebol.zulipchat.com/)
 
 # Rebol/Easing
 
